@@ -40,7 +40,7 @@ DxRenderer::DxRenderer(int width, int height)
     :_handle(nullptr), _width(width), _height(height),
     _swapChain(), _device(), _context(), _renderTargetView(),
     _vertexShader(), _pixelShader(), _inputLayout(), _vertexBuffer(),
-    _texture(), _textureView(), _textureInfo()
+    _texture(), _textureView(), _textureInfo(), _blendState()
 {
 }
 
@@ -179,6 +179,24 @@ bool DxRenderer::init(HWND handle)
     _context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     _context->VSSetShader(_vertexShader, nullptr, 0);
     _context->PSSetShader(_pixelShader, nullptr, 0);
+
+    //blend state
+    {
+        D3D11_BLEND_DESC blendDesc;
+        memset(&blendDesc, 0, sizeof(blendDesc));
+        blendDesc.RenderTarget[0].BlendEnable = TRUE;
+        blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+        blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+        blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+        blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+        blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+        hr = _device->CreateBlendState(&blendDesc, _blendState.getpp());
+#undef max
+        _context->OMSetBlendState(_blendState, nullptr, std::numeric_limits<UINT>::max());
+    }
 
     return true;
 }

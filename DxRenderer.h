@@ -24,6 +24,7 @@ private:
     dx_ptr<ID3D11Texture2D> _texture;
     dx_ptr<ID3D11ShaderResourceView> _textureView;
     dx_ptr<ID3D11SamplerState> _samplerState;
+    dx_ptr<ID3D11BlendState> _blendState;
     struct
     {
         uint16_t width;
