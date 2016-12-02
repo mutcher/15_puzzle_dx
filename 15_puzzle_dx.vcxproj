@@ -70,11 +70,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="DxRenderer.cpp" />
     <ClCompile Include="GameField.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="DxRenderer.h" />
     <ClInclude Include="GameField.h" />
     <ClInclude Include="dx_ptr.h" />
