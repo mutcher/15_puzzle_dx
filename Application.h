@@ -5,19 +5,20 @@
 class Application final
 {
 private:
-    GameField _gameField;
     DxRenderer _renderer;
     HWND _handle;
-    uint16_t _stepCount;
 
 private:
-    void update();
-    bool isKeyDown(const int32_t& key);
     void printWindowCaption();
 
 public:
     Application();
     ~Application();
+
+    static inline bool isKeyDown(const int32_t& key)
+    {
+        return GetAsyncKeyState(key) != 0;
+    }
 
     int run(HINSTANCE hInstance, const int& nCmdShow);
 };

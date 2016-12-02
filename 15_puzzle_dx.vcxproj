@@ -73,6 +73,8 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="DxRenderer.cpp" />
     <ClCompile Include="GameField.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="GameSceneRenderer.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +82,10 @@
     <ClInclude Include="DxRenderer.h" />
     <ClInclude Include="GameField.h" />
     <ClInclude Include="dx_ptr.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="GameSceneRenderer.h" />
+    <ClInclude Include="IScene.h" />
+    <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ps.hlsl">

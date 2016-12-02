@@ -1,9 +1,11 @@
 #include "Application.h"
 #include <sstream>
+#include <memory>
+#include "GameScene.h"
+#include "SceneManager.h"
 
 Application::Application()
-    :_gameField(), _renderer(500, 500), _handle(),
-    _stepCount(0)
+    :_renderer(500, 500), _handle()
 {
 }
 
@@ -11,41 +13,6 @@ Application::~Application()
 {
 }
 
-void Application::update()
-{
-    _gameField.update();
-    if (!_gameField.isGameCompleted())
-    {
-        if (isKeyDown(VK_UP))
-        {
-            _gameField.move(GameField::MoveDirection::up);
-        }
-        else if (isKeyDown(VK_DOWN))
-        {
-            _gameField.move(GameField::MoveDirection::down);
-        }
-        else if (isKeyDown(VK_RIGHT))
-        {
-            _gameField.move(GameField::MoveDirection::right);
-        }
-        else if (isKeyDown(VK_LEFT))
-        {
-            _gameField.move(GameField::MoveDirection::left);
-        }
-        if (_gameField.isFieldChanged())
-        {
-            ++_stepCount;
-        }
-    }
-#ifdef _DEBUG
-    if (isKeyDown(VK_ESCAPE))
-    {
-        exit(0);
-    }
-#endif
-
-    printWindowCaption();
-}
 
 int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 {
@@ -59,8 +26,11 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
     int ret = RegisterClassEx(&wc);
 
     _handle = CreateWindowEx(0, "WND", "15 PUZZLE", WS_OVERLAPPEDWINDOW, 0, 0, 500, 500, nullptr, nullptr, hInstance, nullptr);
-
     _renderer.init(_handle);
+
+    std::unique_ptr<GameScene> gameScene(new GameScene(&_renderer));
+    SceneManager::getSingleton().setActiveScene(gameScene.get());
+
 
     ShowWindow(_handle, nCmdShow);
 
@@ -83,10 +53,10 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
         {
             if (frameCounter == 10)
             {
-                update();
+                SceneManager::getSingleton().getActiveScene()->update();
                 frameCounter = 0;
             }
-            _renderer.render(_gameField);
+            SceneManager::getSingleton().getActiveScene()->render();
             ++frameCounter;
         }
     }
@@ -96,14 +66,9 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
     return 0;
 }
 
-bool Application::isKeyDown(const int32_t& key)
-{
-    return GetAsyncKeyState(key) != 0;
-}
-
 void Application::printWindowCaption()
 {
-    std::stringstream ss;
+    /*std::stringstream ss;
     ss << "15 PUZZLE Step:";
     ss << _stepCount;
     if (_gameField.isGameCompleted())
@@ -111,5 +76,5 @@ void Application::printWindowCaption()
         ss << " YOU WIN!";
     }
 
-    SetWindowText(_handle, ss.str().c_str());
+    SetWindowText(_handle, ss.str().c_str());*/
 }
