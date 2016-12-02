@@ -65,16 +65,3 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     return 0;
 }
-
-void Application::printWindowCaption()
-{
-    /*std::stringstream ss;
-    ss << "15 PUZZLE Step:";
-    ss << _stepCount;
-    if (_gameField.isGameCompleted())
-    {
-        ss << " YOU WIN!";
-    }
-
-    SetWindowText(_handle, ss.str().c_str());*/
-}
