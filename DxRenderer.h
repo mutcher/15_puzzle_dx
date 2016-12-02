@@ -22,7 +22,6 @@ private:
     dx_ptr<ID3D11SamplerState> _samplerState;
     dx_ptr<ID3D11BlendState> _blendState;
 
-
 private:
     void initShaders();
     void initBlendState();

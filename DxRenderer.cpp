@@ -4,8 +4,6 @@
 #include <vector>
 #pragma comment(lib, "d3d11.lib")
 
-
-
 std::vector<uint8_t> readFile(const std::wstring& fileName)
 {
     std::ifstream stream(fileName, std::ios_base::ate | std::ios_base::binary);
