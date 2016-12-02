@@ -85,6 +85,8 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameSceneRenderer.h" />
     <ClInclude Include="IScene.h" />
+    <ClInclude Include="MainMenuScene.h" />
+    <ClInclude Include="MainMenuSceneRenderer.h" />
     <ClInclude Include="SceneManager.h" />
   </ItemGroup>
   <ItemGroup>

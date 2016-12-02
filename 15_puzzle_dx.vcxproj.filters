@@ -58,6 +58,12 @@
     <ClInclude Include="GameSceneRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenuScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuSceneRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ps.hlsl">
