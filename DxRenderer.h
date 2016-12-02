@@ -6,7 +6,7 @@
 #include "dx_ptr.h"
 #include "GameField.h"
 
-class DxRenderer
+class DxRenderer final
 {
 private:
     HWND _handle;
@@ -33,6 +33,9 @@ private:
     } _textureInfo;
 
 private:
+    void initShaders();
+    void initBlendState();
+    void initSamplerState();
     void createVertexBuffer();
     void createInstanceBuffer(const GameField& gameField);
     void loadTGATexture();
