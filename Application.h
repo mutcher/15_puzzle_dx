@@ -21,4 +21,5 @@ public:
     }
 
     int run(HINSTANCE hInstance, const int& nCmdShow);
+    LRESULT WINAPI WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 };

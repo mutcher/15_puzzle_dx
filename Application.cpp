@@ -4,8 +4,21 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 
+LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    Application* app = reinterpret_cast<Application*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+    if (app != nullptr)
+    {
+        return app->WindowProc(hWnd, Msg, wParam, lParam);
+    }
+    else
+    {
+        return DefWindowProc(hWnd, Msg, wParam, lParam);
+    }
+}
+
 Application::Application()
-    :_renderer(500, 500), _handle()
+    :_renderer(), _handle()
 {
 }
 
@@ -20,13 +33,17 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
     wc.cbSize = sizeof(wc);
     wc.lpszClassName = "WND";
     wc.hInstance = hInstance;
-    wc.lpfnWndProc = DefWindowProc;
+    wc.lpfnWndProc = fakeWindowProc;
     wc.hCursor = LoadCursor(hInstance, IDC_ARROW);
 
     int ret = RegisterClassEx(&wc);
 
     _handle = CreateWindowEx(0, "WND", "15 PUZZLE", WS_OVERLAPPEDWINDOW, 0, 0, 500, 500, nullptr, nullptr, hInstance, nullptr);
-    _renderer.init(_handle);
+
+    RECT clientRect = {0};
+    GetClientRect(_handle, &clientRect);
+
+    _renderer.init(_handle, clientRect.right, clientRect.bottom);
 
     std::unique_ptr<GameScene> gameScene(new GameScene(&_renderer));
     SceneManager::getSingleton().setActiveScene(gameScene.get());
@@ -36,6 +53,8 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     MSG msg = {0};
     size_t frameCounter = 0;
+
+    SetWindowLongPtr(_handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
     while(true)
     {
@@ -64,4 +83,21 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
     ret = UnregisterClass("WND", hInstance);
 
     return 0;
+}
+
+LRESULT WINAPI Application::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    switch(Msg)
+    {
+    case WM_SIZE:
+        {
+            uint32_t width = LOWORD(lParam);
+            uint32_t height = HIWORD(lParam);
+            _renderer.resize(width, height);
+        }
+        return 0;
+
+    default:
+        return DefWindowProc(hWnd, Msg, wParam, lParam);
+    }
 }

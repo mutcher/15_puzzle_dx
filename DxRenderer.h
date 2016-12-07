@@ -10,8 +10,8 @@ class DxRenderer final
 {
 private:
     HWND _handle;
-    int _width;
-    int _height;
+    uint32_t _width;
+    uint32_t _height;
     dx_ptr<IDXGISwapChain> _swapChain;
     dx_ptr<ID3D11Device> _device;
     dx_ptr<ID3D11DeviceContext> _context;
@@ -26,16 +26,17 @@ private:
     void initShaders();
     void initBlendState();
     void initSamplerState();
+    void initBackBufferAndViewport();
 
 public:
-    DxRenderer(int width, int height);
+    DxRenderer();
     ~DxRenderer() {}
 
-    bool init(HWND handle);
+    bool init(HWND handle, const uint32_t& width, const uint32_t& height);
+    void resize(const uint32_t& width, const uint32_t& height);
 
     void beginRender();
     void endRender();
-
 
     inline ID3D11Device* getDevice()
     {

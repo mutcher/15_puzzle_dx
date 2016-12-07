@@ -18,16 +18,18 @@ std::vector<uint8_t> readFile(const std::wstring& fileName)
     return fileData;
 }
 
-DxRenderer::DxRenderer(int width, int height)
-    :_handle(nullptr), _width(width), _height(height),
+DxRenderer::DxRenderer()
+    :_handle(nullptr), _width(0), _height(0),
     _swapChain(), _device(), _context(), _renderTargetView(),
     _vertexShader(), _pixelShader(), _inputLayout(), _blendState()
 {
 }
 
-bool DxRenderer::init(HWND handle)
+bool DxRenderer::init(HWND handle, const uint32_t& width, const uint32_t& height)
 {
     _handle = handle;
+    _width = width;
+    _height = height;
 
     HRESULT hr = 0;
 
@@ -69,30 +71,10 @@ bool DxRenderer::init(HWND handle)
             _context.getpp());
     }
 
-    {
-        dx_ptr<ID3D11Texture2D> backBuffer;
-        hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.getpp()));
-        hr = _device->CreateRenderTargetView(backBuffer, nullptr, _renderTargetView.getpp());
-    }
-    _context->OMSetRenderTargets(1, _renderTargetView.getpp(), nullptr);
-
-
-    {
-        D3D11_VIEWPORT vp;
-        vp.Height = static_cast<float>(_height);
-        vp.MaxDepth = 1.f;
-        vp.MinDepth = 0.f;
-        vp.TopLeftX = 0.f;
-        vp.TopLeftY = 0.f;
-        vp.Width = static_cast<float>(_width);
-
-        _context->RSSetViewports(1, &vp);
-    }
-
+    initBackBufferAndViewport();
     initShaders();
     initSamplerState();
     initBlendState();
-
     return true;
 }
 
@@ -191,4 +173,44 @@ void DxRenderer::initSamplerState()
 
     HRESULT hr = _device->CreateSamplerState(&samplerDesc, _samplerState.getpp());
     _context->PSSetSamplers(0, 1, _samplerState.getpp());
+}
+
+void DxRenderer::resize(const uint32_t& width, const uint32_t& height)
+{
+    _height = height;
+    _width = width;
+
+    if (_swapChain.getp() != nullptr)
+    {
+        // cleanup render target
+        _context->OMSetRenderTargets(0, nullptr, nullptr);
+        // release render target
+        _renderTargetView.reset();
+        // resizing swap chain back buffer
+        HRESULT hr = _swapChain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0);
+        // recreating back buffer and viewport
+        initBackBufferAndViewport();
+    }
+}
+
+void DxRenderer::initBackBufferAndViewport()
+{
+    dx_ptr<ID3D11Texture2D> backBuffer;
+    // getting back buffer
+    HRESULT hr = _swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.getpp()));
+    // creating render target for back buffer
+    hr = _device->CreateRenderTargetView(backBuffer, nullptr, _renderTargetView.getpp());
+    // setting render target
+    _context->OMSetRenderTargets(1, _renderTargetView.getpp(), nullptr);
+
+    // viewport init
+    D3D11_VIEWPORT vp;
+    vp.Height = static_cast<float>(_height);
+    vp.MaxDepth = 1.f;
+    vp.MinDepth = 0.f;
+    vp.TopLeftX = 0.f;
+    vp.TopLeftY = 0.f;
+    vp.Width = static_cast<float>(_width);
+    // viewport setting
+    _context->RSSetViewports(1, &vp);
 }
