@@ -42,10 +42,22 @@ void MainMenuSceneRenderer::init()
     
     data = _renderer->readFile(L"menu_ps.cso");
     hr = _renderer->getDevice()->CreatePixelShader(data.data(), data.size(), nullptr, _pixelShader.getpp());
+
+    //vertex buffer initialization
 }
 
 void MainMenuSceneRenderer::startup()
 {
+    _renderer->getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    _renderer->getContext()->IASetInputLayout(_inputLayout);
+    _renderer->getContext()->PSSetShader(_pixelShader, nullptr, 0);
+    _renderer->getContext()->VSSetShader(_vertexShader, nullptr, 0);
+
+    // resource view
+    const uint8_t viewCount = 1;
+    ID3D11ShaderResourceView* resourceViews[viewCount];
+    resourceViews[0] = _texture.getTextureView();
+    _renderer->getContext()->PSSetShaderResources(0, viewCount, resourceViews);
 }
 
 void MainMenuSceneRenderer::render()
