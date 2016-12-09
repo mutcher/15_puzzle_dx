@@ -7,6 +7,10 @@ GameScene::GameScene(DxRenderer* renderer)
     _sceneRender.init();
 }
 
+void GameScene::activate()
+{
+}
+
 void GameScene::update()
 {
     _gameField.update();
@@ -36,11 +40,10 @@ void GameScene::update()
 #ifdef _DEBUG
     if (Application::isKeyDown(VK_ESCAPE))
     {
+        //TODO: find optimal solution to exit from application
         exit(0);
     }
 #endif
-
-    //printWindowCaption();
 }
 
 void GameScene::render()

@@ -11,6 +11,20 @@ private:
     {
     }
 
+    ~SceneManager()
+    {
+        deleteActiveScene();
+    }
+
+    void deleteActiveScene()
+    {
+        if (_activeScene != nullptr)
+        {
+            delete _activeScene;
+            _activeScene = nullptr;
+        }
+    }
+
 public:
     static SceneManager& getSingleton()
     {
@@ -20,11 +34,14 @@ public:
 
     IScene* getActiveScene()
     {
+        assert(_activeScene != nullptr);
         return _activeScene;
     }
 
     void setActiveScene(IScene* scene)
     {
+        deleteActiveScene();
         _activeScene = scene;
+        _activeScene->activate();
     }
 };

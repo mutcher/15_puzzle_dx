@@ -13,6 +13,7 @@ private:
 public:
     GameScene(DxRenderer* renderer);
 
+    virtual void activate() override;
     virtual void update() override;
     virtual void render() override;
 };
