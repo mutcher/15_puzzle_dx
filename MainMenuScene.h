@@ -8,18 +8,8 @@ private:
     MainMenuSceneRenderer _sceneRenderer;
 
 public:
-    MainMenuScene(DxRenderer* renderer)
-        :IScene(renderer), _sceneRenderer(renderer)
-    {
-    }
+    MainMenuScene(DxRenderer* renderer);
 
-    virtual void update() override
-    {
-    }
-
-    virtual void render() override
-    {
-        _renderer->beginRender();
-        _renderer->endRender();
-    }
+    virtual void update() override;
+    virtual void render() override;
 };

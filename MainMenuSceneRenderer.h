@@ -1,19 +1,16 @@
 #pragma once
 #include "DxRenderer.h"
+#include "TGATexture.h"
 
 class MainMenuSceneRenderer
 {
 private:
     DxRenderer* _renderer;
-
-private:
-    void loadTexture()
-    {
-    }
+    TGATexture _texture;
 
 public:
-    MainMenuSceneRenderer(DxRenderer* renderer)
-        :_renderer(renderer)
-    {
-    }
+    MainMenuSceneRenderer(DxRenderer* renderer);
+
+    void init();
+    void render();
 };
