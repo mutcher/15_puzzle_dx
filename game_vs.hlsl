@@ -1,4 +1,4 @@
-#include "include.hlsli"
+#include "game_inc.hlsli"
 
 psInput main(vsInput input)
 {

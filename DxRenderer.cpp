@@ -1,10 +1,9 @@
 #define NOMINMAX
 #include "DxRenderer.h"
 #include <fstream>
-#include <vector>
 #pragma comment(lib, "d3d11.lib")
 
-std::vector<uint8_t> readFile(const std::wstring& fileName)
+std::vector<uint8_t> DxRenderer::readFile(const std::wstring& fileName)
 {
     std::ifstream stream(fileName, std::ios_base::ate | std::ios_base::binary);
     stream.exceptions(std::ios_base::badbit | std::ios_base::eofbit | std::ios_base::failbit);
@@ -80,7 +79,7 @@ bool DxRenderer::init(HWND handle, const uint32_t& width, const uint32_t& height
 
 void DxRenderer::initShaders()
 {
-    std::vector<uint8_t> fileData = readFile(L"vs.cso");
+    std::vector<uint8_t> fileData = readFile(L"game_vs.cso");
 
     D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[4];
     inputLayoutDesc[0].AlignedByteOffset = 0;
@@ -118,7 +117,7 @@ void DxRenderer::initShaders()
     HRESULT hr = _device->CreateInputLayout(inputLayoutDesc, 4, fileData.data(), fileData.size(), _inputLayout.getpp());
     hr = _device->CreateVertexShader(fileData.data(), fileData.size(), nullptr, _vertexShader.getpp());
 
-    fileData = readFile(L"ps.cso");
+    fileData = readFile(L"game_ps.cso");
     hr = _device->CreatePixelShader(fileData.data(), fileData.size(), nullptr, _pixelShader.getpp());
 
     _context->IASetInputLayout(_inputLayout);

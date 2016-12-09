@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <Windows.h>
 #include <DirectXMath.h>
+#include <vector>
 
 #include "dx_ptr.h"
 #include "GameField.h"
@@ -47,4 +48,6 @@ public:
     {
         return _context;
     }
+
+    static std::vector<uint8_t> readFile(const std::wstring& fileName);
 };
