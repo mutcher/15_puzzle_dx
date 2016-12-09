@@ -1,6 +1,4 @@
 #include "GameSceneRenderer.h"
-#include <fstream>
-#include <vector>
 
 
 // internal types
@@ -25,13 +23,13 @@ const float g_cellWidth    = (2.f - (2.f * g_windowMargin + 3.f * g_cellMargin))
 
 GameSceneRenderer::GameSceneRenderer(DxRenderer* renderer, GameField* gameField)
     :_renderer(renderer), _gameField(gameField), _vertexBuffer(), 
-    _instanceBuffer(), _texture(), _textureView(), _textureInfo()
+    _instanceBuffer(), _texture()
 {
 }
 
 void GameSceneRenderer::init()
 {
-    this->loadTexture();
+    _texture.load("data/texture.tga", _renderer->getDevice());
     this->createVertexBuffer();
     this->createInstanceBuffer();
 }
@@ -39,7 +37,7 @@ void GameSceneRenderer::init()
 void GameSceneRenderer::createVertexBuffer()
 {
     vertex_t vertices[6];
-    const float textureCellWidth = 21.f / _textureInfo.width;
+    const float textureCellWidth = 21.f / _texture.getTextureInfo().width;
 
     // left top
     vertices[0].pos = DirectX::XMFLOAT3(0.f, 0.f, .5f);
@@ -86,6 +84,7 @@ void GameSceneRenderer::createInstanceBuffer()
         DirectX::XMFLOAT2 startPos(-1.f + g_windowMargin, 1.f - g_windowMargin);
 
         const auto& basicArray = _gameField->getBasicArray();
+        const auto& textureInfo = _texture.getTextureInfo();
         for(uint8_t i = 0; i < basicArray.size(); ++i)
         {
             // position calculation
@@ -101,8 +100,8 @@ void GameSceneRenderer::createInstanceBuffer()
             uint8_t row = basicArray[i] / 4;
             uint8_t col = basicArray[i] - row * 4;
 
-            instances[i].tex.x = (col * 22.f + 1.f) / _textureInfo.width;
-            instances[i].tex.y = (row * 22.f + 1.f) / _textureInfo.height;
+            instances[i].tex.x = (col * 22.f + 1.f) / textureInfo.width;
+            instances[i].tex.y = (row * 22.f + 1.f) / textureInfo.height;
         }
 
         D3D11_BUFFER_DESC ibDesc;
@@ -122,75 +121,6 @@ void GameSceneRenderer::createInstanceBuffer()
     }
 }
 
-void GameSceneRenderer::loadTexture()
-{
-    const std::string textureFilename = "data/texture.tga";
-    std::ifstream stream(textureFilename, std::ios_base::beg | std::ios_base::binary);
-    stream.exceptions(std::ios_base::failbit | std::ios_base::badbit | std::ios_base::eofbit);
-    struct 
-    {
-        unsigned char data1[12];
-        unsigned short width;
-        unsigned short height;
-        unsigned char bpp;
-        unsigned char data2;
-    } img_header;
-
-    stream.read(reinterpret_cast<char*>(&img_header), sizeof(img_header));
-
-    // image should be 32 bpp
-    if (img_header.bpp != sizeof(uint32_t) * 8)
-    {
-        stream.setstate(std::ios_base::failbit);
-    }
-
-    _textureInfo.width = img_header.width;
-    _textureInfo.height = img_header.height;
-    _textureInfo.bpp = img_header.bpp;
-
-    size_t imgSize = img_header.height * img_header.width;
-    std::vector<uint32_t> tmpData(imgSize);
-    tmpData.shrink_to_fit();
-    stream.read(reinterpret_cast<char*>(tmpData.data()), imgSize * sizeof(uint32_t));
-    stream.close();
-
-    for(auto iter = tmpData.begin(); iter != tmpData.end(); ++iter)
-    {
-        uint8_t* bgra = reinterpret_cast<uint8_t*>(&(*iter));
-        // swap b and r components to get rgba from bgra
-        std::swap(bgra[0], bgra[2]);
-    }
-
-    D3D11_TEXTURE2D_DESC textureDesc;
-    textureDesc.ArraySize = 1;
-    textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-    textureDesc.CPUAccessFlags = 0;
-    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    textureDesc.Height = img_header.height;
-    textureDesc.MipLevels = 1;
-    textureDesc.MiscFlags = 0;
-    textureDesc.SampleDesc.Count = 1;
-    textureDesc.SampleDesc.Quality = 0;
-    textureDesc.Usage = D3D11_USAGE_DEFAULT;
-    textureDesc.Width = img_header.width;
-
-    D3D11_SUBRESOURCE_DATA subData;
-    subData.pSysMem = tmpData.data();
-    subData.SysMemPitch = img_header.width * sizeof(uint32_t);
-    subData.SysMemSlicePitch = 0;
-
-    HRESULT hr = _renderer->getDevice()->CreateTexture2D(&textureDesc, &subData, _texture.getpp());
-
-    D3D11_SHADER_RESOURCE_VIEW_DESC textureViewDesc;
-    memset(&textureViewDesc, 0, sizeof(textureViewDesc));
-    textureViewDesc.Format = textureDesc.Format;
-    textureViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-    textureViewDesc.Texture2D.MipLevels = 1;
-    textureViewDesc.Texture2D.MostDetailedMip = 0;
-
-    hr = _renderer->getDevice()->CreateShaderResourceView(_texture.getp(), &textureViewDesc, _textureView.getpp());
-}
-
 void GameSceneRenderer::render()
 {
     _renderer->beginRender();
@@ -200,7 +130,12 @@ void GameSceneRenderer::render()
     _renderer->getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     _renderer->getContext()->IASetVertexBuffers(1, 1, _instanceBuffer.getpp(), &stride, &offset);
     _renderer->getContext()->IASetVertexBuffers(0, 1, _vertexBuffer.getpp(), &stride, &offset);
-    _renderer->getContext()->PSSetShaderResources(0, 1, _textureView.getpp());
+
+    // setting texture views
+    const uint16_t textureViewCount = 1;
+    ID3D11ShaderResourceView* textureViews[textureViewCount];
+    textureViews[0] = _texture.getTextureView();
+    _renderer->getContext()->PSSetShaderResources(0, textureViewCount, textureViews);
 
     _renderer->getContext()->DrawInstanced(6, 16, 0, 0);
     _renderer->endRender();

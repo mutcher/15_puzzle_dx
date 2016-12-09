@@ -1,5 +1,6 @@
 #pragma once
 #include "DxRenderer.h"
+#include "TGATexture.h"
 
 class GameSceneRenderer
 {
@@ -8,19 +9,11 @@ private:
     GameField* _gameField;
     dx_ptr<ID3D11Buffer> _vertexBuffer;
     dx_ptr<ID3D11Buffer> _instanceBuffer;
-    dx_ptr<ID3D11Texture2D> _texture;
-    dx_ptr<ID3D11ShaderResourceView> _textureView;
-    struct
-    {
-        uint16_t width;
-        uint16_t height;
-        uint8_t  bpp;
-    } _textureInfo;
+    TGATexture _texture;
 
 private:
     void createVertexBuffer();
     void createInstanceBuffer();
-    void loadTexture();
 
 public:
     GameSceneRenderer(DxRenderer* renderer, GameField* gameField);

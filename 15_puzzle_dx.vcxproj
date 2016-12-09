@@ -76,6 +76,7 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameSceneRenderer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TGATexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -88,6 +89,7 @@
     <ClInclude Include="MainMenuScene.h" />
     <ClInclude Include="MainMenuSceneRenderer.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="TGATexture.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="ps.hlsl">
