@@ -37,11 +37,13 @@ void MainMenuSceneRenderer::init()
     inputLayout[1].SemanticIndex = 0;
     inputLayout[1].SemanticName = "TEXCOORD";
 
-    HRESULT hr = _renderer->getDevice()->CreateInputLayout(inputLayout, inputLayoutCount, data.data(), data.size(), _inputLayout.getpp());
-    hr = _renderer->getDevice()->CreateVertexShader(data.data(), data.size(), nullptr, _vertexShader.getpp());
+    auto* device = _renderer->getDevice();
+
+    HRESULT hr = device->CreateInputLayout(inputLayout, inputLayoutCount, data.data(), data.size(), _inputLayout.getpp());
+    hr = device->CreateVertexShader(data.data(), data.size(), nullptr, _vertexShader.getpp());
     
     data = _renderer->readFile(L"menu_ps.cso");
-    hr = _renderer->getDevice()->CreatePixelShader(data.data(), data.size(), nullptr, _pixelShader.getpp());
+    hr = device->CreatePixelShader(data.data(), data.size(), nullptr, _pixelShader.getpp());
 
     //vertex buffer initialization
 }

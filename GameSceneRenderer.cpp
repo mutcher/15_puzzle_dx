@@ -126,17 +126,18 @@ void GameSceneRenderer::render()
     _renderer->beginRender();
     createInstanceBuffer();
 
+    auto* context = _renderer->getContext();
     UINT stride = sizeof(instance_t), offset = 0;
-    _renderer->getContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    _renderer->getContext()->IASetVertexBuffers(1, 1, _instanceBuffer.getpp(), &stride, &offset);
-    _renderer->getContext()->IASetVertexBuffers(0, 1, _vertexBuffer.getpp(), &stride, &offset);
+    context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    context->IASetVertexBuffers(1, 1, _instanceBuffer.getpp(), &stride, &offset);
+    context->IASetVertexBuffers(0, 1, _vertexBuffer.getpp(), &stride, &offset);
 
     // setting texture views
     const uint16_t textureViewCount = 1;
     ID3D11ShaderResourceView* textureViews[textureViewCount];
     textureViews[0] = _texture.getTextureView();
-    _renderer->getContext()->PSSetShaderResources(0, textureViewCount, textureViews);
+    context->PSSetShaderResources(0, textureViewCount, textureViews);
 
-    _renderer->getContext()->DrawInstanced(6, 16, 0, 0);
+    context->DrawInstanced(6, 16, 0, 0);
     _renderer->endRender();
 }

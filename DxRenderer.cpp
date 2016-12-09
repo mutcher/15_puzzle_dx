@@ -81,7 +81,8 @@ void DxRenderer::initShaders()
 {
     std::vector<uint8_t> fileData = readFile(L"game_vs.cso");
 
-    D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[4];
+    const uint8_t inputLayoutCount = 4;
+    D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[inputLayoutCount];
     inputLayoutDesc[0].AlignedByteOffset = 0;
     inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
     inputLayoutDesc[0].InputSlot = 0;
@@ -114,7 +115,7 @@ void DxRenderer::initShaders()
     inputLayoutDesc[3].SemanticIndex = 1;
     inputLayoutDesc[3].SemanticName = "TEXCOORD";
 
-    HRESULT hr = _device->CreateInputLayout(inputLayoutDesc, 4, fileData.data(), fileData.size(), _inputLayout.getpp());
+    HRESULT hr = _device->CreateInputLayout(inputLayoutDesc, inputLayoutCount, fileData.data(), fileData.size(), _inputLayout.getpp());
     hr = _device->CreateVertexShader(fileData.data(), fileData.size(), nullptr, _vertexShader.getpp());
 
     fileData = readFile(L"game_ps.cso");
