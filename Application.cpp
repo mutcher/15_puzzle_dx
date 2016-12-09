@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "MainMenuScene.h"
+#include "GameScene.h"
 #include "SceneManager.h"
 
 LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
@@ -43,7 +43,7 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     _renderer.init(_handle, clientRect.right, clientRect.bottom);
 
-    SceneManager::getSingleton().setActiveScene(new MainMenuScene(&_renderer));
+    SceneManager::getSingleton().setActiveScene(new GameScene(&_renderer));
 
     ShowWindow(_handle, nCmdShow);
 
