@@ -23,8 +23,16 @@ const float g_cellWidth    = (2.f - (2.f * g_windowMargin + 3.f * g_cellMargin))
 
 GameSceneRenderer::GameSceneRenderer(DxRenderer* renderer, GameField* gameField)
     :_renderer(renderer), _gameField(gameField), _vertexBuffer(), 
-    _instanceBuffer(), _texture()
+    _instanceBuffer(), _texture(), _vertexShader(), _pixelShader(), _inputLayout()
 {
+}
+
+void GameSceneRenderer::startup()
+{
+    auto* context = _renderer->getContext();
+    context->IASetInputLayout(_inputLayout);
+    context->VSSetShader(_vertexShader, nullptr, 0);
+    context->PSSetShader(_pixelShader, nullptr, 0);
 }
 
 void GameSceneRenderer::init()
@@ -32,6 +40,52 @@ void GameSceneRenderer::init()
     _texture.load("data/texture.tga", _renderer->getDevice());
     this->createVertexBuffer();
     this->createInstanceBuffer();
+    this->createShaders();
+}
+
+void GameSceneRenderer::createShaders()
+{
+    std::vector<uint8_t> fileData = _renderer->readFile(L"game_vs.cso");
+
+    const uint8_t inputLayoutCount = 4;
+    D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[inputLayoutCount];
+    inputLayoutDesc[0].AlignedByteOffset = 0;
+    inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+    inputLayoutDesc[0].InputSlot = 0;
+    inputLayoutDesc[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    inputLayoutDesc[0].InstanceDataStepRate = 0;
+    inputLayoutDesc[0].SemanticIndex = 0;
+    inputLayoutDesc[0].SemanticName = "POSITION";
+
+    inputLayoutDesc[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+    inputLayoutDesc[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+    inputLayoutDesc[1].InputSlot = 0;
+    inputLayoutDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+    inputLayoutDesc[1].InstanceDataStepRate = 0;
+    inputLayoutDesc[1].SemanticIndex = 0;
+    inputLayoutDesc[1].SemanticName = "TEXCOORD";
+
+    inputLayoutDesc[2].AlignedByteOffset = 0;
+    inputLayoutDesc[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+    inputLayoutDesc[2].InputSlot = 1;
+    inputLayoutDesc[2].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+    inputLayoutDesc[2].InstanceDataStepRate = 1;
+    inputLayoutDesc[2].SemanticIndex = 1;
+    inputLayoutDesc[2].SemanticName = "POSITION";
+
+    inputLayoutDesc[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
+    inputLayoutDesc[3].Format = DXGI_FORMAT_R32G32_FLOAT;
+    inputLayoutDesc[3].InputSlot = 1;
+    inputLayoutDesc[3].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
+    inputLayoutDesc[3].InstanceDataStepRate = 1;
+    inputLayoutDesc[3].SemanticIndex = 1;
+    inputLayoutDesc[3].SemanticName = "TEXCOORD";
+
+    HRESULT hr = _renderer->getDevice()->CreateInputLayout(inputLayoutDesc, inputLayoutCount, fileData.data(), fileData.size(), _inputLayout.getpp());
+    hr = _renderer->getDevice()->CreateVertexShader(fileData.data(), fileData.size(), nullptr, _vertexShader.getpp());
+
+    fileData = _renderer->readFile(L"game_ps.cso");
+    hr = _renderer->getDevice()->CreatePixelShader(fileData.data(), fileData.size(), nullptr, _pixelShader.getpp());
 }
 
 void GameSceneRenderer::createVertexBuffer()

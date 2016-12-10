@@ -19,8 +19,7 @@ std::vector<uint8_t> DxRenderer::readFile(const std::wstring& fileName)
 
 DxRenderer::DxRenderer()
     :_handle(nullptr), _width(0), _height(0),
-    _swapChain(), _device(), _context(), _renderTargetView(),
-    _vertexShader(), _pixelShader(), _inputLayout(), _blendState()
+    _swapChain(), _device(), _context(), _renderTargetView(), _blendState()
 {
 }
 
@@ -71,59 +70,9 @@ bool DxRenderer::init(HWND handle, const uint32_t& width, const uint32_t& height
     }
 
     initBackBufferAndViewport();
-    initShaders();
     initSamplerState();
     initBlendState();
     return true;
-}
-
-void DxRenderer::initShaders()
-{
-    std::vector<uint8_t> fileData = readFile(L"game_vs.cso");
-
-    const uint8_t inputLayoutCount = 4;
-    D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[inputLayoutCount];
-    inputLayoutDesc[0].AlignedByteOffset = 0;
-    inputLayoutDesc[0].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-    inputLayoutDesc[0].InputSlot = 0;
-    inputLayoutDesc[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    inputLayoutDesc[0].InstanceDataStepRate = 0;
-    inputLayoutDesc[0].SemanticIndex = 0;
-    inputLayoutDesc[0].SemanticName = "POSITION";
-
-    inputLayoutDesc[1].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-    inputLayoutDesc[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-    inputLayoutDesc[1].InputSlot = 0;
-    inputLayoutDesc[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-    inputLayoutDesc[1].InstanceDataStepRate = 0;
-    inputLayoutDesc[1].SemanticIndex = 0;
-    inputLayoutDesc[1].SemanticName = "TEXCOORD";
-
-    inputLayoutDesc[2].AlignedByteOffset = 0;
-    inputLayoutDesc[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-    inputLayoutDesc[2].InputSlot = 1;
-    inputLayoutDesc[2].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-    inputLayoutDesc[2].InstanceDataStepRate = 1;
-    inputLayoutDesc[2].SemanticIndex = 1;
-    inputLayoutDesc[2].SemanticName = "POSITION";
-
-    inputLayoutDesc[3].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-    inputLayoutDesc[3].Format = DXGI_FORMAT_R32G32_FLOAT;
-    inputLayoutDesc[3].InputSlot = 1;
-    inputLayoutDesc[3].InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-    inputLayoutDesc[3].InstanceDataStepRate = 1;
-    inputLayoutDesc[3].SemanticIndex = 1;
-    inputLayoutDesc[3].SemanticName = "TEXCOORD";
-
-    HRESULT hr = _device->CreateInputLayout(inputLayoutDesc, inputLayoutCount, fileData.data(), fileData.size(), _inputLayout.getpp());
-    hr = _device->CreateVertexShader(fileData.data(), fileData.size(), nullptr, _vertexShader.getpp());
-
-    fileData = readFile(L"game_ps.cso");
-    hr = _device->CreatePixelShader(fileData.data(), fileData.size(), nullptr, _pixelShader.getpp());
-
-    _context->IASetInputLayout(_inputLayout);
-    _context->VSSetShader(_vertexShader, nullptr, 0);
-    _context->PSSetShader(_pixelShader, nullptr, 0);
 }
 
 void DxRenderer::beginRender()

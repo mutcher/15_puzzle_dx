@@ -11,6 +11,8 @@ private:
     dx_ptr<ID3D11InputLayout> _inputLayout;
     dx_ptr<ID3D11VertexShader> _vertexShader;
     dx_ptr<ID3D11PixelShader> _pixelShader;
+    dx_ptr<ID3D11Buffer> _vertexBuffer;
+    dx_ptr<ID3D11SamplerState> _samplerState;
 
 public:
     MainMenuSceneRenderer(DxRenderer* renderer);
