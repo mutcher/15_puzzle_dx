@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "GameScene.h"
+#include "MainMenuScene.h"
 #include "SceneManager.h"
 
 LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
@@ -36,14 +36,17 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     int ret = RegisterClassEx(&wc);
 
-    _handle = CreateWindowEx(0, "WND", "15 PUZZLE", WS_OVERLAPPEDWINDOW, 0, 0, 500, 500, nullptr, nullptr, hInstance, nullptr);
+    RECT wndRect;
+    wndRect.right = 500;
+    wndRect.bottom = 500;
+    BOOL b = AdjustWindowRect(&wndRect, WS_OVERLAPPEDWINDOW, FALSE);
+    assert(b);
 
-    RECT clientRect = {0};
-    GetClientRect(_handle, &clientRect);
+    _handle = CreateWindowEx(0, "WND", "15 PUZZLE", WS_OVERLAPPEDWINDOW, 0, 0, wndRect.right, wndRect.bottom, nullptr, nullptr, hInstance, nullptr);
 
-    _renderer.init(_handle, clientRect.right, clientRect.bottom);
+    _renderer.init(_handle, 500, 500);
 
-    SceneManager::getSingleton().setActiveScene(new GameScene(&_renderer));
+    SceneManager::getSingleton().setActiveScene(new MainMenuScene(&_renderer));
 
     ShowWindow(_handle, nCmdShow);
 
@@ -66,12 +69,15 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
         }
         else
         {
+            SceneManager& sceneMgr = SceneManager::getSingleton();
+            sceneMgr.update();
+
             if (frameCounter == 10)
             {
-                SceneManager::getSingleton().getActiveScene()->update();
+                sceneMgr.getActiveScene()->update();
                 frameCounter = 0;
             }
-            SceneManager::getSingleton().getActiveScene()->render();
+            sceneMgr.getActiveScene()->render();
             ++frameCounter;
         }
     }

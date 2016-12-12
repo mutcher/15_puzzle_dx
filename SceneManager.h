@@ -5,6 +5,7 @@ class SceneManager final
 {
 private:
     IScene* _activeScene;
+    IScene* _tmpScene;
 
     SceneManager()
         :_activeScene(nullptr)
@@ -32,6 +33,17 @@ public:
         return mgr;
     }
 
+    void update()
+    {
+        if (_tmpScene != nullptr)
+        {
+            deleteActiveScene();
+            _activeScene = _tmpScene;
+            _tmpScene = nullptr;
+            _activeScene->activate();
+        }
+    }
+
     IScene* getActiveScene()
     {
         assert(_activeScene != nullptr);
@@ -40,8 +52,12 @@ public:
 
     void setActiveScene(IScene* scene)
     {
-        deleteActiveScene();
-        _activeScene = scene;
-        _activeScene->activate();
+        if (_tmpScene != nullptr)
+        {
+            delete _tmpScene;
+            _tmpScene = nullptr;
+        }
+
+        _tmpScene = scene;
     }
 };

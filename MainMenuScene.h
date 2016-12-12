@@ -5,15 +5,8 @@
 class MainMenuScene final : public IScene
 {
 private:
-    enum class MainMenuButtons : uint8_t
-    {
-        Start = 0,
-        Exit = 1
-    };
-
-private:
     MainMenuSceneRenderer _sceneRenderer;
-    MainMenuButtons _activeButton;
+    MainMenuSceneRenderer::MainMenuButtons _activeButton;
 
 public:
     MainMenuScene(DxRenderer* renderer);

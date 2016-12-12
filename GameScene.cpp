@@ -9,6 +9,7 @@ GameScene::GameScene(DxRenderer* renderer)
 
 void GameScene::activate()
 {
+   _sceneRender.startup();
 }
 
 void GameScene::update()
