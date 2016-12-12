@@ -6,7 +6,7 @@ build:
   project: 15_puzzle_dx.sln
   verbosity: normal
 after_build:
-- cmd: 7z a 15_puzzle_dx.7z .\x64\Release\15_puzzle_dx.exe .\x64\Release\*.cso data\*.tga
+- cmd: 7z a 15_puzzle_dx.7z .\x64\Release\bin\15_puzzle_dx.exe .\x64\Release\bin\*.cso data\*.tga
 artifacts:
 - path: 15_puzzle_dx.7z
   name: 15 Puzzle

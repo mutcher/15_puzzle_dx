@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "15_puzzle_dx", "15_puzzle_dx.vcxproj", "{E4114BE8-D9FE-46FC-823E-1CD2C41714A1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "15_puzzle_dx", "src/15_puzzle_dx.vcxproj", "{E4114BE8-D9FE-46FC-823E-1CD2C41714A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
