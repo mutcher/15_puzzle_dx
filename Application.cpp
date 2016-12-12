@@ -57,15 +57,14 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     while(true)
     {
-        if (!IsWindow(_handle))
-        {
-            break;
-        }
-
         if (PeekMessage(&msg, _handle, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
+            if (msg.message == WM_QUIT)
+            {
+                break;
+            }
         }
         else
         {
@@ -102,4 +101,9 @@ LRESULT WINAPI Application::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARA
     default:
         return DefWindowProc(hWnd, Msg, wParam, lParam);
     }
+}
+
+void Application::Shutdown()
+{
+    PostQuitMessage(0);
 }

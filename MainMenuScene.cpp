@@ -33,8 +33,7 @@ void MainMenuScene::update()
         }
         else if (_activeButton == MainMenuSceneRenderer::MainMenuButtons::Exit)
         {
-            //TODO: find optimal solution to exit from application
-            exit(0);
+            Application::Shutdown();
         }
     }
     _activeButton = static_cast<MainMenuSceneRenderer::MainMenuButtons>(activeButton);

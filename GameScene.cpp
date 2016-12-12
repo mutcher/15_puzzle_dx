@@ -41,8 +41,7 @@ void GameScene::update()
 #ifdef _DEBUG
     if (Application::isKeyDown(VK_ESCAPE))
     {
-        //TODO: find optimal solution to exit from application
-        exit(0);
+        Application::Shutdown();
     }
 #endif
 }

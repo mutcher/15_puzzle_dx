@@ -19,6 +19,7 @@ public:
     {
         return GetAsyncKeyState(key) != 0;
     }
+    static void Shutdown();
 
     int run(HINSTANCE hInstance, const int& nCmdShow);
     LRESULT WINAPI WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
