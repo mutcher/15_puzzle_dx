@@ -4,7 +4,7 @@
 #include "GameScene.h"
 
 MainMenuScene::MainMenuScene(DxRenderer* renderer)
-    :IScene(renderer), _sceneRenderer(renderer), _activeButton(MainMenuButtons::Start)
+    :IScene(renderer), _sceneRenderer(renderer), _activeButton(MainMenuSceneRenderer::MainMenuButtons::Start)
 {
     _sceneRenderer.init();
 }
@@ -27,20 +27,20 @@ void MainMenuScene::update()
     }
     else if (Application::isKeyDown(VK_RETURN))
     {
-        if (_activeButton == MainMenuButtons::Start)
+        if (_activeButton == MainMenuSceneRenderer::MainMenuButtons::Start)
         {
             SceneManager::getSingleton().setActiveScene(new GameScene(_renderer));
         }
-        else if (_activeButton == MainMenuButtons::Exit)
+        else if (_activeButton == MainMenuSceneRenderer::MainMenuButtons::Exit)
         {
             //TODO: find optimal solution to exit from application
             exit(0);
         }
     }
-    _activeButton = static_cast<MainMenuButtons>(activeButton);
+    _activeButton = static_cast<MainMenuSceneRenderer::MainMenuButtons>(activeButton);
 }
 
 void MainMenuScene::render()
 {
-    _sceneRenderer.render();
+    _sceneRenderer.render(_activeButton);
 }
