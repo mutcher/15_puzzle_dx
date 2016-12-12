@@ -13,5 +13,5 @@ Same as [console version](https://github.com/mutcher/15_puzzle) but I desided us
 MIT is our everything :)
 
 ## Screenshots
- ![Main Menu](https://github.com/mutcher/15_puzzle_dx/.github/main_menu.png?raw=true "Main Menu")
- ![Game Field](https://github.com/mutcher/15_puzzle_dx/.github/game_field.png?raw=true "Game Field")
+ ![Main Menu](https://github.com/mutcher/15_puzzle_dx/raw/master/.github/main_menu.png "Main Menu")
+ ![Game Field](https://github.com/mutcher/15_puzzle_dx/raw/master/.github/game_field.png "Game Field")
