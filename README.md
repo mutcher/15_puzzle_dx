@@ -1,7 +1,7 @@
 # 15 Puzzle Game
 ## Description
 This is classic 15 puzzle game.
-Same as [console version] but I desided use DirectX 11 for rendering.
+Same as [console version](https://github.com/mutcher/15_puzzle) but I desided use DirectX 11 for rendering.
 
 ## How To Compile
 1. First of all you need Visual Studio 2012 or newer.
@@ -12,4 +12,6 @@ Same as [console version] but I desided use DirectX 11 for rendering.
 ## License
 MIT is our everything :)
 
-[console version]: https://github.com/mutcher/15_puzzle
+## Screenshots
+ ![Main Menu](https://github.com/mutcher/15_puzzle_dx/.github/main_menu.png?raw=true "Main Menu")
+ ![Game Field](https://github.com/mutcher/15_puzzle_dx/.github/game_field.png?raw=true "Game Field")
