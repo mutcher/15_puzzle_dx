@@ -20,10 +20,10 @@ MainMenuSceneRenderer::MainMenuSceneRenderer(DxRenderer* renderer)
 
 void MainMenuSceneRenderer::init()
 {
-    _texture.load("data/menu.tga", _renderer->getDevice());
+    _texture.load("data\\menu.tga", _renderer->getDevice());
 
     //shader initialization
-    auto data = _renderer->readFile(L"menu_vs.cso");
+    auto data = _renderer->readFile(L"shaders\\menu_vs.cso");
 
     const uint8_t inputLayoutCount = 2;
     D3D11_INPUT_ELEMENT_DESC inputLayout[inputLayoutCount];
@@ -49,7 +49,7 @@ void MainMenuSceneRenderer::init()
     HRESULT hr = device->CreateInputLayout(inputLayout, inputLayoutCount, data.data(), data.size(), _inputLayout.getpp());
     hr = device->CreateVertexShader(data.data(), data.size(), nullptr, _vertexShader.getpp());
 
-    data = _renderer->readFile(L"menu_ps.cso");
+    data = _renderer->readFile(L"shaders\\menu_ps.cso");
     hr = device->CreatePixelShader(data.data(), data.size(), nullptr, _pixelShader.getpp());
 
     //vertex buffer initialization

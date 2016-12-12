@@ -45,7 +45,7 @@ void GameSceneRenderer::init()
 
 void GameSceneRenderer::createShaders()
 {
-    std::vector<uint8_t> fileData = _renderer->readFile(L"game_vs.cso");
+    std::vector<uint8_t> fileData = _renderer->readFile(L"shaders\\game_vs.cso");
 
     const uint8_t inputLayoutCount = 4;
     D3D11_INPUT_ELEMENT_DESC inputLayoutDesc[inputLayoutCount];
@@ -84,7 +84,7 @@ void GameSceneRenderer::createShaders()
     HRESULT hr = _renderer->getDevice()->CreateInputLayout(inputLayoutDesc, inputLayoutCount, fileData.data(), fileData.size(), _inputLayout.getpp());
     hr = _renderer->getDevice()->CreateVertexShader(fileData.data(), fileData.size(), nullptr, _vertexShader.getpp());
 
-    fileData = _renderer->readFile(L"game_ps.cso");
+    fileData = _renderer->readFile(L"shaders\\game_ps.cso");
     hr = _renderer->getDevice()->CreatePixelShader(fileData.data(), fileData.size(), nullptr, _pixelShader.getpp());
 }
 
