@@ -69,12 +69,15 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
         }
         else
         {
+            SceneManager& sceneMgr = SceneManager::getSingleton();
+            sceneMgr.update();
+
             if (frameCounter == 10)
             {
-                SceneManager::getSingleton().getActiveScene()->update();
+                sceneMgr.getActiveScene()->update();
                 frameCounter = 0;
             }
-            SceneManager::getSingleton().getActiveScene()->render();
+            sceneMgr.getActiveScene()->render();
             ++frameCounter;
         }
     }
