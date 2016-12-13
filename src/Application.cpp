@@ -36,15 +36,15 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     int ret = RegisterClassEx(&wc);
 
-    RECT wndRect;
+    RECT wndRect = {0};
     wndRect.right = 500;
     wndRect.bottom = 500;
-    BOOL b = AdjustWindowRect(&wndRect, WS_OVERLAPPEDWINDOW, FALSE);
-    assert(b);
+    AdjustWindowRect(&wndRect, WS_OVERLAPPEDWINDOW, FALSE);
 
     _handle = CreateWindowEx(0, "WND", "15 PUZZLE", WS_OVERLAPPEDWINDOW, 0, 0, wndRect.right, wndRect.bottom, nullptr, nullptr, hInstance, nullptr);
 
-    _renderer.init(_handle, 500, 500);
+    GetClientRect(_handle, &wndRect);
+    _renderer.init(_handle, wndRect.right - wndRect.left, wndRect.bottom - wndRect.top);
 
     SceneManager::getSingleton().setActiveScene(new MainMenuScene(&_renderer));
 

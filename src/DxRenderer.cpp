@@ -35,12 +35,12 @@ bool DxRenderer::init(HWND handle, const uint32_t& width, const uint32_t& height
         DXGI_SWAP_CHAIN_DESC swapChainDesc;
         swapChainDesc.BufferCount = 1;
         swapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        swapChainDesc.BufferDesc.Height = 500;
+        swapChainDesc.BufferDesc.Height = _height;
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 75;
         swapChainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
         swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-        swapChainDesc.BufferDesc.Width = 500;
+        swapChainDesc.BufferDesc.Width = _width;
         swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 #ifdef _DEBUG
         swapChainDesc.Flags = D3D11_CREATE_DEVICE_DEBUG;
