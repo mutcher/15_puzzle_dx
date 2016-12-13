@@ -57,7 +57,7 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     while(true)
     {
-        if (PeekMessage(&msg, _handle, 0, 0, PM_REMOVE))
+        if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
@@ -96,7 +96,13 @@ LRESULT WINAPI Application::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARA
             uint32_t height = HIWORD(lParam);
             _renderer.resize(width, height);
         }
-        return 0;
+        return 0L;
+
+    case WM_DESTROY:
+        {
+            PostQuitMessage(0);
+        }
+        return 0L;
 
     default:
         return DefWindowProc(hWnd, Msg, wParam, lParam);
