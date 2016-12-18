@@ -1,5 +1,7 @@
 #include "GameScene.h"
 #include "Application.h"
+#include "SceneManager.h"
+#include "MainMenuScene.h"
 
 GameScene::GameScene(DxRenderer* renderer)
     :IScene(renderer), _stepCount(0), _sceneRender(renderer, &_gameField)
@@ -39,12 +41,10 @@ void GameScene::update()
             ++_stepCount;
         }
     }
-#ifdef _DEBUG
     if (app.isKeyDown(VK_ESCAPE))
     {
-        Application::Shutdown();
+        SceneManager::getSingleton().setActiveScene(new MainMenuScene(_renderer));
     }
-#endif
 }
 
 void GameScene::render()
