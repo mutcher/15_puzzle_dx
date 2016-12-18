@@ -70,18 +70,18 @@ void MainMenuSceneRenderer::init()
     textureBoxSize.x2 = (textureInfo.width - 1.f) / static_cast<float>(textureInfo.width);
     textureBoxSize.y2 = 96.f / static_cast<float>(textureInfo.height);
 
-    vertexes[0].pos = DirectX::XMFLOAT3(-.95f, 1.f, .5f);
+    vertexes[0].pos = DirectX::XMFLOAT3(-1.05f, 1.f, .5f);
     vertexes[0].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y1);
 
-    vertexes[1].pos = DirectX::XMFLOAT3(.95f, 1.f, .5f);
+    vertexes[1].pos = DirectX::XMFLOAT3(1.05f, 1.f, .5f);
     vertexes[1].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y1);
 
-    vertexes[2].pos = DirectX::XMFLOAT3(-.95f, 0.29f, .5f);
+    vertexes[2].pos = DirectX::XMFLOAT3(-1.05f, 0.24f, .5f);
     vertexes[2].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y2);
 
     vertexes[3] = vertexes[1];
 
-    vertexes[4].pos = DirectX::XMFLOAT3(.95f, 0.29f, .5f);
+    vertexes[4].pos = DirectX::XMFLOAT3(1.05f, 0.24f, .5f);
     vertexes[4].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y2);
 
     vertexes[5] = vertexes[2];
@@ -114,18 +114,18 @@ void MainMenuSceneRenderer::init()
     textureBoxSize.x2 = (textureInfo.width - 1.f) / static_cast<float>(textureInfo.width);
     textureBoxSize.y2 = 133.f / static_cast<float>(textureInfo.height);
 
-    vertexes[12].pos = DirectX::XMFLOAT3(-.70f, .15f, .5f);
+    vertexes[12].pos = DirectX::XMFLOAT3(-.70f, .1f, .5f);
     vertexes[12].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y1);
 
-    vertexes[13].pos = DirectX::XMFLOAT3(.70f, .15f, .5f);
+    vertexes[13].pos = DirectX::XMFLOAT3(.70f, .1f, .5f);
     vertexes[13].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y1);
 
-    vertexes[14].pos = DirectX::XMFLOAT3(-.70f, -.1f, .5f);
+    vertexes[14].pos = DirectX::XMFLOAT3(-.70f, -.15f, .5f);
     vertexes[14].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y2);
 
     vertexes[15] = vertexes[13];
 
-    vertexes[16].pos = DirectX::XMFLOAT3(.70f, -.1f, .5f);
+    vertexes[16].pos = DirectX::XMFLOAT3(.70f, -.15f, .5f);
     vertexes[16].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y2);
 
     vertexes[17] = vertexes[14];
@@ -136,18 +136,18 @@ void MainMenuSceneRenderer::init()
     textureBoxSize.x2 = (textureInfo.width - 1.f) / static_cast<float>(textureInfo.width);
     textureBoxSize.y2 = 171.f / static_cast<float>(textureInfo.height);
 
-    vertexes[18].pos = DirectX::XMFLOAT3(-.70f, -.15f, .5f);
+    vertexes[18].pos = DirectX::XMFLOAT3(-.70f, -.2f, .5f);
     vertexes[18].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y1);
 
-    vertexes[19].pos = DirectX::XMFLOAT3(.70f, -.15f, .5f);
+    vertexes[19].pos = DirectX::XMFLOAT3(.70f, -.2f, .5f);
     vertexes[19].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y1);
 
-    vertexes[20].pos = DirectX::XMFLOAT3(-.70f, -.4f, .5f);
+    vertexes[20].pos = DirectX::XMFLOAT3(-.70f, -.45f, .5f);
     vertexes[20].tex = DirectX::XMFLOAT2(textureBoxSize.x1, textureBoxSize.y2);
 
     vertexes[21] = vertexes[19];
 
-    vertexes[22].pos = DirectX::XMFLOAT3(.70f, -.4f, .5f);
+    vertexes[22].pos = DirectX::XMFLOAT3(.70f, -.45f, .5f);
     vertexes[22].tex = DirectX::XMFLOAT2(textureBoxSize.x2, textureBoxSize.y2);
 
     vertexes[23] = vertexes[20];
