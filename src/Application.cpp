@@ -2,18 +2,7 @@
 #include "MainMenuScene.h"
 #include "SceneManager.h"
 
-LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-    Application* app = reinterpret_cast<Application*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
-    if (app != nullptr)
-    {
-        return app->WindowProc(hWnd, Msg, wParam, lParam);
-    }
-    else
-    {
-        return DefWindowProc(hWnd, Msg, wParam, lParam);
-    }
-}
+LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
 Application::Application()
     :_renderer(), _handle()
@@ -24,6 +13,11 @@ Application::~Application()
 {
 }
 
+Application& Application::getSingleton()
+{
+    static Application app;
+    return app;
+}
 
 int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 {
@@ -52,8 +46,6 @@ int Application::run(HINSTANCE hInstance, const int& nCmdShow)
 
     MSG msg = {0};
     size_t frameCounter = 0;
-
-    SetWindowLongPtr(_handle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
     while(true)
     {
@@ -100,7 +92,7 @@ LRESULT WINAPI Application::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 
     case WM_DESTROY:
         {
-            PostQuitMessage(0);
+            Application::Shutdown();
         }
         return 0L;
 
@@ -112,4 +104,19 @@ LRESULT WINAPI Application::WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARA
 void Application::Shutdown()
 {
     PostQuitMessage(0);
+}
+
+bool Application::isKeyDown(const int32_t& key)
+{
+    bool ret = false;
+    if (GetActiveWindow() == Application::getSingleton()._handle)
+    {
+        ret = GetAsyncKeyState(key) != 0;
+    }
+    return ret;
+}
+
+LRESULT WINAPI fakeWindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    return Application::getSingleton().WindowProc(hWnd, Msg, wParam, lParam);
 }

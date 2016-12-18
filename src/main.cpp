@@ -3,6 +3,5 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR szCmdLine, int nCmdShow)
 {
-    Application app;
-    return app.run(hInstance, nCmdShow);
+    return Application::getSingleton().run(hInstance, nCmdShow);
 }

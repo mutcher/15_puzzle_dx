@@ -9,16 +9,14 @@ private:
     HWND _handle;
 
 private:
-    void printWindowCaption();
+    Application();
 
 public:
-    Application();
     ~Application();
 
-    static inline bool isKeyDown(const int32_t& key)
-    {
-        return GetAsyncKeyState(key) != 0;
-    }
+    static Application& getSingleton();
+
+    bool isKeyDown(const int32_t& key);
     static void Shutdown();
 
     int run(HINSTANCE hInstance, const int& nCmdShow);

@@ -15,21 +15,22 @@ void GameScene::activate()
 void GameScene::update()
 {
     _gameField.update();
+    auto& app = Application::getSingleton();
     if (!_gameField.isGameCompleted())
     {
-        if (Application::isKeyDown(VK_UP))
+        if (app.isKeyDown(VK_UP))
         {
             _gameField.move(GameField::MoveDirection::up);
         }
-        else if (Application::isKeyDown(VK_DOWN))
+        else if (app.isKeyDown(VK_DOWN))
         {
             _gameField.move(GameField::MoveDirection::down);
         }
-        else if (Application::isKeyDown(VK_RIGHT))
+        else if (app.isKeyDown(VK_RIGHT))
         {
             _gameField.move(GameField::MoveDirection::right);
         }
-        else if (Application::isKeyDown(VK_LEFT))
+        else if (app.isKeyDown(VK_LEFT))
         {
             _gameField.move(GameField::MoveDirection::left);
         }
@@ -39,7 +40,7 @@ void GameScene::update()
         }
     }
 #ifdef _DEBUG
-    if (Application::isKeyDown(VK_ESCAPE))
+    if (app.isKeyDown(VK_ESCAPE))
     {
         Application::Shutdown();
     }

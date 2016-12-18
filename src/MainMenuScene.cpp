@@ -16,16 +16,17 @@ void MainMenuScene::activate()
 
 void MainMenuScene::update()
 {
+    auto& app = Application::getSingleton();
     auto activeButton = static_cast<uint8_t>(_activeButton);
-    if (Application::isKeyDown(VK_UP) && activeButton != 0)
+    if (app.isKeyDown(VK_UP) && activeButton != 0)
     {
         --activeButton;
     }
-    else if (Application::isKeyDown(VK_DOWN) && activeButton != 1)
+    else if (app.isKeyDown(VK_DOWN) && activeButton != 1)
     {
         ++activeButton;
     }
-    else if (Application::isKeyDown(VK_RETURN))
+    else if (app.isKeyDown(VK_RETURN))
     {
         if (_activeButton == MainMenuSceneRenderer::MainMenuButtons::Start)
         {
