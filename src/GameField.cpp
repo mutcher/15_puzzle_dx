@@ -38,23 +38,7 @@ GameField::GameField()
     :_gameField(), _isChanged(true), _zeroPos(_gameField.size() - 1),
     _isGameCompleted(false)
 {
-    for(uint8_t i = 0; i < _gameField.size(); ++i)
-    {
-        _gameField[i] = i + 1;
-        if (i == _gameField.size() - 1)
-        {
-            _gameField[i] = 0;
-        }
-    }
-
-    std::random_device rd;
-    std::mt19937 g(rd());
-    std::uniform_int_distribution<size_t> gen(0, 3);
-    for(size_t i = 0; i < 16*16; ++i)
-    {
-        MoveDirection dir = static_cast<MoveDirection>(gen(g));
-        move(dir);
-    }
+    reload();
 }
 
 GameField::~GameField()
@@ -91,6 +75,29 @@ void GameField::move(const MoveDirection& direction)
         _isChanged = true;
     }
 
+}
+
+void GameField::reload()
+{
+    _isGameCompleted = false;
+    _zeroPos = _gameField.size() - 1;
+    for(uint8_t i = 0; i < _gameField.size(); ++i)
+    {
+        _gameField[i] = i + 1;
+        if (i == _gameField.size() - 1)
+        {
+            _gameField[i] = 0;
+        }
+    }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::uniform_int_distribution<size_t> gen(0, 3);
+    for(size_t i = 0; i < 16*16; ++i)
+    {
+        MoveDirection dir = static_cast<MoveDirection>(gen(g));
+        move(dir);
+    }
 }
 
 void GameField::update()

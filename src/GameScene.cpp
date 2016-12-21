@@ -36,6 +36,11 @@ void GameScene::update()
         {
             _gameField.move(GameField::MoveDirection::left);
         }
+        else if (app.isKeyDown(VK_F5))
+        {
+            _gameField.reload();
+            _stepCount = 0;
+        }
         if (_gameField.isFieldChanged())
         {
             ++_stepCount;

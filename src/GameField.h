@@ -26,6 +26,7 @@ public:
     GameField();
     ~GameField();
 
+    void reload();
     void update();
     void move(const MoveDirection& direction);
 

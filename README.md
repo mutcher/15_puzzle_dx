@@ -27,5 +27,10 @@ MIT is our everything :)
 1. Run the application.
 
 ## Default Controls
+### Main Menu
+* Arrow keys.
+* Enter button.
+### Game Scene
 * Arrow keys
-* Enter button
+* F5 button to restart the game.
+* Esc button to back into main menu.
