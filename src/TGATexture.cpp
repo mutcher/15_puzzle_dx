@@ -19,9 +19,9 @@ enum class tga_image_type : uint8_t
 namespace ifstream_helpers
 {
     template<typename T>
-    inline void read(std::ifstream& stream, T* data, const size_t& count = 1)
+    inline void read(std::ifstream& stream, T* data, const size_t& size)
     {
-        stream.read(reinterpret_cast<char*>(data), sizeof(T) * count);
+        stream.read(reinterpret_cast<char*>(data), size);
     }
 
     template<typename T>
