@@ -2,6 +2,19 @@
 #include <fstream>
 #include <vector>
 
+// all possible image types
+// described in TGA format specification
+enum class tga_image_type : uint8_t
+{
+    none         = 0,  // no image data
+    colormap     = 1,  // uncompressed, colormap
+    bgr          = 2,  // uncompressed, bgr
+    mono         = 3,  // uncompressed, black-white image
+    colormap_rle = 9,  // compressed, colormap
+    bgr_rle      = 10, // compressed, bgr
+    mono_rle     = 11  // compressed, black-white image
+};
+
 TGATexture::TGATexture()
     :_texture(), _textureView()
 {
@@ -21,16 +34,23 @@ void TGATexture::load(const std::string& filename, ID3D11Device* device)
     // reading tga image header
     struct 
     {
-        unsigned char data1[12];
-        unsigned short width;
-        unsigned short height;
-        unsigned char bpp;
-        unsigned char data2;
+        uint8_t data1[2];
+        tga_image_type tga_type;
+        uint8_t data2[5];
+        // 0,0 point for origin x,y
+        // is bottom left
+        uint16_t x_origin;
+        uint16_t y_origin;
+        uint16_t width;
+        uint16_t height;
+        uint8_t bpp;
+        uint8_t data3;
     } img_header;
     stream.read(reinterpret_cast<char*>(&img_header), sizeof(img_header));
 
-    // image should be 32 bpp
-    if (img_header.bpp != sizeof(uint32_t) * 8)
+    if ((img_header.bpp != sizeof(uint32_t) * 8)     || // image should be 32 bpp
+        (img_header.tga_type != tga_image_type::bgr) || // image shouldn't be compressed with RLE
+        (img_header.y_origin != img_header.height))     // origin point should be left-top not left-bottom
     {
         stream.setstate(std::ios_base::failbit);
     }
