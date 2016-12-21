@@ -16,6 +16,22 @@ enum class tga_image_type : uint8_t
     mono_rle     = 11  // compressed, black-white image
 };
 
+namespace ifstream_helpers
+{
+    template<typename T>
+    inline void read(std::ifstream& stream, T* data, const size_t& count = 1)
+    {
+        stream.read(reinterpret_cast<char*>(data), sizeof(T) * count);
+    }
+
+    template<typename T>
+    inline void read(std::ifstream& stream, T& data, const size_t& count = 1)
+    {
+        stream.read(reinterpret_cast<char*>(&data), sizeof(T) * count);
+    }
+}
+
+// TGATexture class
 TGATexture::TGATexture()
     :_texture(), _textureView()
 {
@@ -47,10 +63,9 @@ void TGATexture::load(const std::string& filename, ID3D11Device* device)
         uint8_t bpp;
         uint8_t data3;
     } img_header;
-    stream.read(reinterpret_cast<char*>(&img_header), sizeof(img_header));
+    ifstream_helpers::read(stream, img_header);
 
-    if ((img_header.bpp != sizeof(uint32_t) * 8)     || // image should be 32 bpp
-        (img_header.tga_type != tga_image_type::bgr))  // image shouldn't be compressed with RLE
+    if (img_header.bpp != sizeof(uint32_t) * 8) // image should be 32 bpp
     {
         stream.setstate(std::ios_base::failbit);
     }
@@ -62,7 +77,39 @@ void TGATexture::load(const std::string& filename, ID3D11Device* device)
     size_t imgSize = img_header.height * img_header.width;
     std::vector<uint32_t> tmpData(imgSize);
     tmpData.shrink_to_fit();
-    stream.read(reinterpret_cast<char*>(tmpData.data()), imgSize * sizeof(uint32_t));
+    if (img_header.tga_type == tga_image_type::bgr)
+    {
+        ifstream_helpers::read(stream, tmpData.data(), imgSize * sizeof(uint32_t));
+    }
+    else if (img_header.tga_type == tga_image_type::bgr_rle)
+    {
+        size_t loadedCount = 0;
+        uint8_t tmpByte;
+
+        while(loadedCount < tmpData.size())
+        {
+            ifstream_helpers::read(stream, tmpByte);
+            size_t pointCount = (tmpByte & ~0x80) + 1;
+            if (tmpByte & 0x80) // RLE packet
+            {
+                uint32_t tmpPacket;
+                ifstream_helpers::read(stream, tmpPacket);
+                std::fill_n(tmpData.begin() + loadedCount, pointCount, tmpPacket);
+            }
+            else // RAW packet
+            {
+                for(size_t i = 0; i < pointCount; ++i)
+                {
+                    ifstream_helpers::read(stream, tmpData[loadedCount + i]);
+                }
+            }
+            loadedCount += pointCount;
+        }
+    }
+    else // unsupported format
+    {
+        stream.setstate(std::ios_base::failbit);
+    }
     stream.close();
 
     // origin point is left-bottom
