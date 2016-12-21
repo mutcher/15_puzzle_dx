@@ -8,7 +8,7 @@ build:
   project: 15_puzzle_dx.sln
   verbosity: normal
 after_build:
-- cmd: >-
+- cmd:>- 
   echo "x64 build packing"
   7z a 15_puzzle_dx_x64.7z .\x64\Release\bin\*
   echo "x86 build packing"
