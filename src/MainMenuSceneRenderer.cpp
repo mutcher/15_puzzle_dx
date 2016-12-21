@@ -20,7 +20,7 @@ MainMenuSceneRenderer::MainMenuSceneRenderer(DxRenderer* renderer)
 
 void MainMenuSceneRenderer::init()
 {
-    _texture.load("data\\menu.tga", _renderer->getDevice());
+    _texture.load("data\\main_menu.tga", _renderer->getDevice());
 
     //shader initialization
     auto data = _renderer->readFile(L"shaders\\menu_vs.cso");

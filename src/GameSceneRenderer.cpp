@@ -37,7 +37,7 @@ void GameSceneRenderer::startup()
 
 void GameSceneRenderer::init()
 {
-    _texture.load("data/texture.tga", _renderer->getDevice());
+    _texture.load("data\\game_scene.tga", _renderer->getDevice());
     this->createVertexBuffer();
     this->createInstanceBuffer();
     this->createShaders();
