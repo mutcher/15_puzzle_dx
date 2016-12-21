@@ -1,5 +1,6 @@
 # 15 Puzzle Game
 [![Build status](https://ci.appveyor.com/api/projects/status/2v5auycn8a26tun7?svg=true)](https://ci.appveyor.com/project/mutcher/15-puzzle-dx)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Screenshots
 ![Main Menu](https://github.com/mutcher/15_puzzle_dx/raw/master/.github/main_menu.png "Main Menu")
 ![Game Field](https://github.com/mutcher/15_puzzle_dx/raw/master/.github/game_field.png "Game Field")
@@ -30,6 +31,7 @@ MIT is our everything :)
 ### Main Menu
 * Arrow keys.
 * Enter button.
+
 ### Game Scene
 * Arrow keys
 * F5 button to restart the game.
