@@ -8,6 +8,6 @@ build:
   project: 15_puzzle_dx.sln
   verbosity: normal
 after_build:
-- cmd: 7z a 15_puzzle_dx_$(PlatformShortName).7z $(SolutionDir)$(PlatformShortName)\$(Configuration)\bin\*
+- cmd: 7z a 15_puzzle_dx_%PLATFORM%.7z .\%PLATFORM%\%CONFIGURATION%\bin\*
 artifacts:
-- path: 15_puzzle_dx_$(PlatformShortName).7z
+- path: 15_puzzle_dx_%PLATFORM%.7z
