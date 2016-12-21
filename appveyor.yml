@@ -1,12 +1,25 @@
 version: 1.1.2.{build}
 skip_tags: true
 configuration: Release
-platform: x64
+platform:
+- x64
+- x86
 build:
   project: 15_puzzle_dx.sln
   verbosity: normal
 after_build:
-- cmd: 7z a 15_puzzle_dx.7z .\x64\Release\bin\*
+- cmd: >-
+  echo "x64 build packing"
+  7z a 15_puzzle_dx_x64.7z .\x64\Release\bin\*
+  echo "x86 build packing"
+  7z a 15_puzzle_dx_x86.7z .\x86\Release\bin\*
+  echo "Universal build packing"
+  7z a 15_puzzle_dx.7z .\x64\Release\bin\*
+  7z a 15_puzzle_dx.7z .\x86\Release\bin\*.exe
 artifacts:
 - path: 15_puzzle_dx.7z
-  name: 15 Puzzle
+  name: Universal
+- path: 15_puzzle_dx_x64.7z
+  name: x64
+- path: 15_puzzle_dx_x86.7z
+  name: x86
