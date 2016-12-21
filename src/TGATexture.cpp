@@ -1,6 +1,7 @@
 #include "TGATexture.h"
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 // all possible image types
 // described in TGA format specification
@@ -49,8 +50,7 @@ void TGATexture::load(const std::string& filename, ID3D11Device* device)
     stream.read(reinterpret_cast<char*>(&img_header), sizeof(img_header));
 
     if ((img_header.bpp != sizeof(uint32_t) * 8)     || // image should be 32 bpp
-        (img_header.tga_type != tga_image_type::bgr) || // image shouldn't be compressed with RLE
-        (img_header.y_origin != img_header.height))     // origin point should be left-top not left-bottom
+        (img_header.tga_type != tga_image_type::bgr))  // image shouldn't be compressed with RLE
     {
         stream.setstate(std::ios_base::failbit);
     }
@@ -64,6 +64,17 @@ void TGATexture::load(const std::string& filename, ID3D11Device* device)
     tmpData.shrink_to_fit();
     stream.read(reinterpret_cast<char*>(tmpData.data()), imgSize * sizeof(uint32_t));
     stream.close();
+
+    // origin point is left-bottom
+    if (img_header.y_origin == 0)
+    {
+        for(auto fIter = tmpData.begin(), lIter = tmpData.end() - img_header.width;
+            fIter < lIter;
+            fIter += img_header.width, lIter -= img_header.width)
+        {
+            std::swap_ranges(fIter, fIter + img_header.width, lIter);
+        }
+    }
 
     for(auto iter = tmpData.begin(); iter != tmpData.end(); ++iter)
     {
