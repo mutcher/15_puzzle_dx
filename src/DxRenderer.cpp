@@ -9,7 +9,7 @@ std::vector<uint8_t> DxRenderer::readFile(const std::wstring& fileName)
     stream.exceptions(std::ios_base::badbit | std::ios_base::eofbit | std::ios_base::failbit);
     fpos_t pos = stream.tellg();
     assert(pos != fpos_t(-1));
-    std::vector<uint8_t> fileData(pos);
+    std::vector<uint8_t> fileData(static_cast<size_t>(pos));
     fileData.shrink_to_fit();
     stream.seekg(0);
     stream.read(reinterpret_cast<char*>(fileData.data()), fileData.size());
